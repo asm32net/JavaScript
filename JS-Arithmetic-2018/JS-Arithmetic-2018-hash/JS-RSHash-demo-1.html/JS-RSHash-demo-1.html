@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="Generator" content="EditPlus">
+<title>JS-RSHash-demo-1.html</title>
+<style>
+.col-1 { width:90px; }
+.col-2 { width:100px; }
+.col-3 { width:115px; text-align:right; }
+.col-4 { width:35px; text-align:right; }
+</style>
+</head>
+<body>
+
+<h1>JS-RSHash-demo-1.html</h1>
+
+<p></p>
+<p><button>RSHash-demo-1</button></p>
+<div></div>
+
+<script>
+
+function JS_RSHash_demo_1(){
+
+	function toInt(n){
+		return parseInt(n) % 0x7fffffff;
+	}
+
+	this.RSHash = function(s){
+		var n = s.length,
+			a = 378551,
+			b = 63689,
+			nHash = 0;
+		for(var i = 0; i < n; i++){
+			nHash = toInt(s.charCodeAt(i) + toInt(nHash * a));
+			a = toInt(a * b);
+		}
+		return toInt(nHash & 0x7fffffff);
+	}
+}
+
+(function(){
+	var oDisplays = [
+		document.getElementsByTagName('p')[0],
+		document.getElementsByTagName('div')[0] ];
+
+	var oExecute = document.getElementsByTagName('button')[0];
+
+	var A_strKeys = Array('C', 'C++', 'Java', 'C#', 'Python', 'Go', 'Scala', 'vb.net', 'JavaScript', 'PHP', 'Perl', 'Ruby');
+	var jrhd = new JS_RSHash_demo_1();
+
+	oDisplays[0].innerHTML = JSON.stringify(A_strKeys);
+
+
+	function JS_showResult(){
+		var _html = '<table border="1" cellspacing="0" cellpadding="5" borderColor="#ccc" style="border-collapse:collapse;">\n';
+		for(var i = 0, l = A_strKeys.length; i < l; i++){
+			var nHash = jrhd.RSHash(A_strKeys[i]);
+			_html += '\t<tr>\n' +
+				'\t\t<td class="col-1">' + i + '</td>\n' +
+				'\t\t<td class="col-2">' + A_strKeys[i] + '</td>\n' +
+				'\t\t<td class="col-3">' + nHash + '</td>\n' +
+				'\t\t<td class="col-3">' + (nHash % 31) + '</td>\n' +
+				'\t</tr>\n';
+		}
+		_html += '</table>\n';
+		oDisplays[1].innerHTML = _html;
+		oExecute.disabled = false;
+	}
+
+	oExecute.onclick = function(){
+		oExecute.disabled = true;
+		oDisplays[1].innerHTML = '...';
+
+		setTimeout(JS_showResult, 100);
+	}
+
+})();
+
+/*
+JS
+==============================
+0   C             84696419   5
+1   C++         2086249171  28
+2   Java        1272967249   4
+3   C#          1433862906   3
+4   Python      1776348114  24
+5   Go          1500973386   0
+6   Scala       1276745609  29
+7   vb.net        32442616  19
+8   JavaScript  1328881425   3
+9   PHP          427383448  19
+10  Perl        1129388874   9
+11  Ruby        1044729175  28
+
+C
+==============================
+0          C                   84696412  31
+1          C++               2219337286   1
+2          Java              1542292725   6
+3          C#                1316419575   9
+4          Python            4101775411  19
+5          Go                1249309159  10
+6          Scala             4044407073   3
+7          vb.net            3096269542  25
+8          JavaScript        3504591080  23
+9          PHP                589789791  30
+10         Perl              3397136578  22
+11         Ruby              3643069621   4
+*/
+
+</script>
+
+</body>
+</html>
